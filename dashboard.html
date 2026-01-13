@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Principal - Control de Gastos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <header class="header">
+        Control de Gastos Personales
+    </header>
+
+    <!-- MENÚ UNIFICADO -->
+    <nav class="menu">
+        <a href="dashboard.html" class="activo">Inicio</a>
+        <a href="movimientos.html">Registrar movimiento</a>
+        <a href="reportes.html">Reportes</a>
+        <a href="index.html">Cerrar sesión</a>
+    </nav>
+
+    <div class="contenedor">
+        <!-- PANEL DE RESUMEN -->
+        <div class="panel">
+            <h2>Resumen financiero</h2>
+
+            <p>Saldo actual: <strong id="saldo" style="font-size: 18px;"></strong></p>
+
+            <ul>
+                <li>Ingresos este mes: $2,000,000</li>
+                <li>Egresos este mes: $800,000</li>
+                <li>Presupuesto disponible: $400,000</li>
+            </ul>
+
+            <a href="reportes.html" class="boton">Ver detalles</a>
+        </div>
+
+        <!-- PANEL DE ÚLTIMOS MOVIMIENTOS -->
+        <div class="panel">
+            <h2>Últimos movimientos</h2>
+            <div id="ultimosMovimientos"></div>
+
+            <a href="movimientos.html" class="boton">Registrar nuevo movimiento</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2025 - Aplicativo de Control de Gastos | Versión 1.0
+    </footer>
+
+    <script src="js/app.js"></script>
+
+    <script>
+        // Mostrar saldo actual
+        document.getElementById("saldo").textContent = "$" + calcularSaldo();
+
+        // Mostrar los últimos 4 movimientos
+        const lista = document.getElementById("ultimosMovimientos");
+        const movs = JSON.parse(localStorage.getItem("movimientos")) || [];
+
+        if (movs.length === 0) {
+            lista.innerHTML = "<p>No hay movimientos registrados.</p>";
+        } else {
+            let html = "<ul style='list-style:none; padding:0;'>";
+
+            movs.slice(-4).reverse().forEach(m => {
+                html += `
+                    <li style="
+                        background:#f9f9f9;
+                        margin-bottom:8px;
+                        padding:10px;
+                        border-left:5px solid ${m.tipo === 'ingreso' ? 'green' : 'red'};
+                        border-radius:8px;
+                    ">
+                        ${m.descripcion} – $${m.valor}
+                    </li>
+                `;
+            });
+
+            html += "</ul>";
+            lista.innerHTML = html;
+        }
+    </script>
+
+</body>
+</html>
